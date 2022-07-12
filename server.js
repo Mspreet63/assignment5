@@ -1,3 +1,17 @@
+/*********************************************************************************
+*  WEB322 – Assignment 04
+*  I declare that this assignment is my own work in accordance with Seneca  Academic Policy.  No part 
+*  of this assignment has been copied manually or electronically from any other source 
+*  (including 3rd party web sites) or distributed to other students.
+* 
+*  Name: __Manpreet Singh____________________ Student ID: ___125947218___________ Date: __11 July 2022______________
+*
+*  Heroku App URL: ___________________________________________________________
+* 
+*  GitHub Repository URL: _https://github.com/Mspreet63/assignment4_____________________________________________________
+*
+********************************************************************************/ 
+
 var express = require("express");
 var fs = require('fs');
 var path = require('path');
@@ -19,26 +33,26 @@ function onHttpStart() {
 app.use(express.static('public'));
 
 app.engine('.hbs', exphbs.engine({
-  extname: '.hbs',
-  helpers: {
-      navLink: function (url, options) {
-          return '<li' +
-              ((url == app.locals.activeRoute) ? ' class="active" ' : '') +
-              '><a href="' + url + '">' + options.fn(this) + '</a></li>';
-      },
-      equal: function (lvalue, rvalue, options) {
-          if (arguments.length < 3)
-              throw new Error("Handlebars Helper equal needs 2 parameters");
-          if (lvalue != rvalue) {
-              return options.inverse(this);
-          } else {
-              return options.fn(this);
-          }
-      },
-      safeHTML: function (context) {
-          return stripJs(context);
-      }
-  }
+    extname: '.hbs',
+    helpers: {
+        navLink: function (url, options) {
+            return '<li' +
+                ((url == app.locals.activeRoute) ? ' class="active" ' : '') +
+                '><a href="' + url + '">' + options.fn(this) + '</a></li>';
+        },
+        equal: function (lvalue, rvalue, options) {
+            if (arguments.length < 3)
+                throw new Error("Handlebars Helper equal needs 2 parameters");
+            if (lvalue != rvalue) {
+                return options.inverse(this);
+            } else {
+                return options.fn(this);
+            }
+        },
+        safeHTML: function (context) {
+            return stripJs(context);
+        }
+    }
 }));
 app.set('view engine', '.hbs');
 
@@ -49,7 +63,9 @@ cloudinary.config({
   api_secret: 'z8N02lFW2Xjciga2lckb5M2up_Y',
   secure: true
 });
-
+var path = require('path');
+const { log } = require('console');
+var views = path.join(__dirname, 'views');
 
 app.use(function (req, res, next) {
     let route = req.path.substring(1);
@@ -149,27 +165,27 @@ app.post('/posts/add', upload.single("featureImage"), (req, res) => {
 
 app.get('/blog/:id', async (req, res) => {
 
-    // Declare an object to store properties for the view
+
     let viewData = {};
 
     try {
 
-        // declare empty array to hold "post" objects
+
         let posts = [];
 
-        // if there's a "category" query, filter the returned posts by category
+
         if (req.query.category) {
-            // Obtain the published "posts" by category
+
             posts = await blog.getPublishedPostsByCategory(req.query.category);
         } else {
-            // Obtain the published "posts"
+
             posts = await blog.getPublishedPosts();
         }
 
-        // sort the published posts by postDate
+
         posts.sort((a, b) => new Date(b.postDate) - new Date(a.postDate));
 
-        // store the "posts" and "post" data in the viewData object (to be passed to the view)
+
         viewData.posts = posts;
 
     } catch (err) {
@@ -177,7 +193,7 @@ app.get('/blog/:id', async (req, res) => {
     }
 
     try {
-        // Obtain the post by "id"
+
         posts = await blog.getPostById(req.params.id);
         let post = posts[0];
         viewData.post = post;
@@ -187,46 +203,46 @@ app.get('/blog/:id', async (req, res) => {
 
 
     try {
-        // Obtain the full list of "categories"
+
         let categories = await blog.getCategories();
 
-        // store the "categories" data in the viewData object (to be passed to the view)
+
         viewData.categories = categories;
     } catch (err) {
-        viewData.categoriesMessage = "no results"
+        viewData.categoriesMessage = "Try another"
     }
     console.log(viewData);
 
-    // render the "blog" view with all of the data (viewData)
+
     res.render("blog", { data: viewData })
 });
 
 app.get('/blog', async (req, res) => {
 
-    // Declare an object to store properties for the view
+
     let viewData = {};
 
     try {
 
-        // declare empty array to hold "post" objects
+
         let posts = [];
 
-        // if there's a "category" query, filter the returned posts by category
+
         if (req.query.category) {
-            // Obtain the published "posts" by category
+
             posts = await blog.getPublishedPostsByCategory(req.query.category);
         } else {
-            // Obtain the published "posts"
+
             posts = await blog.getPublishedPosts();
         }
 
-        // sort the published posts by postDate
+
         posts.sort((a, b) => new Date(b.postDate) - new Date(a.postDate));
 
-        // get the latest post from the front of the list (element 0)
+
         let post = posts[0];
 
-        // store the "posts" and "post" data in the viewData object (to be passed to the view)
+
         viewData.posts = posts;
         viewData.post = post;
 
@@ -235,18 +251,20 @@ app.get('/blog', async (req, res) => {
     }
 
     try {
-        // Obtain the full list of "categories"
+
         let categories = await blog.getCategories();
 
-        // store the "categories" data in the viewData object (to be passed to the view)
+
         viewData.categories = categories;
     } catch (err) {
         viewData.categoriesMessage = "no results"
     }
-    // render the "blog" view with all of the data (viewData)
+
     res.render("blog", { data: viewData })
 
 });
+
+
 
 app.get('/categories', (req, res) => {
     blog.getCategories().then((data) => {

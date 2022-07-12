@@ -112,7 +112,7 @@ module.exports.getPublishedPostsByCategory = function (category) {
         }
 
         if (publishedPostsByCategory.length == 0) {
-            reject("query returned 0 results");
+            reject("no results returned");
             return;
         }
         resolve(publishedPostsByCategory);
