@@ -63,9 +63,7 @@ cloudinary.config({
   api_secret: 'z8N02lFW2Xjciga2lckb5M2up_Y',
   secure: true
 });
-var path = require('path');
-const { log } = require('console');
-var views = path.join(__dirname, 'views');
+
 
 app.use(function (req, res, next) {
     let route = req.path.substring(1);
